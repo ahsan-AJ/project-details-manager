@@ -1,7 +1,10 @@
 // TODO: Implement this approach https://medium.com/@RubenOostinga/avoiding-deeply-nested-component-trees-973edb632991
 
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {firestoreConnect} from 'react-redux-firebase';
+import {compose} from 'redux';
+
 import ProjectList from '../projects/ProjectList'
 import Notifications from './Notifications'
 
@@ -33,9 +36,19 @@ class Dashboard extends Component {
 
 // Create function mapStateToProps return an object which properties are attached to the props of this component
 const mapStateToProps = (state) => {
+    console.log(state);
     return {
-        projects : state.project.projects
+        projects : state.firestore.ordered.projects
     }
 };
 
-export default connect(mapStateToProps)(Dashboard);
+
+// Use compose to attach multiple higher order components to the component;
+// use fireStoreConnect HOC to sync this component with a firestore collection
+
+export default compose(
+    connect(mapStateToProps),
+    firestoreConnect([
+        {collection : 'projects'}
+    ])
+    ) (Dashboard);

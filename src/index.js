@@ -10,25 +10,35 @@ import * as serviceWorker from './serviceWorker';
 //  import {createStore} from Redux;
 // Import provider component so that application has access to the store
 //  import {provider} from 'react-redux';
-import {createStore, applyMiddleware} from 'redux';
+
 import {Provider} from 'react-redux';
-import rootReducer from './store/reducers/rootReducer';
-// Create a store variable and call createStore();
-//  Combine different reducers into a single reducer and pass it to the create store function
 
-//  For asynchronous tasks like fetching data, we use middleware like redux thunk or redux saga
-//  install redux-thunk or redux-saga and add it as a middleware
+import { createFirestoreInstance } from 'redux-firestore';
+import {ReactReduxFirebaseProvider} from 'react-redux-firebase';
+import firebase_config from './config/firebase_config';
 
-import thunk from 'redux-thunk';
+import store from './store';
 
-// use applyMiddleWare function in createStore to pass list of middlewares to the app
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+
+const appStore = store();
 
 //  Wrap the App component in the Provider component with store as a prop
+const rrfConfig = { userProfile: 'users', useFirestoreForProfile: true };
+
+const rrfProps = {
+    firebase: firebase_config,
+    config: rrfConfig,
+    dispatch : appStore.dispatch,
+    createFirestoreInstance
+};
+
+
 ReactDOM.render(
-    <Provider store={store}>
+    <Provider store={appStore}>
+        <ReactReduxFirebaseProvider {...rrfProps}>
         <App />
+        </ReactReduxFirebaseProvider>
     </Provider>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
