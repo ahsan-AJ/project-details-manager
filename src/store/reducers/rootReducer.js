@@ -1,16 +1,17 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux'
+import { firestoreReducer } from 'redux-firestore';
+import { firebaseReducer } from 'react-redux-firebase'
 
-import authReducer from './authReducer';
-import projectReducer from './projectReducer';
-
-// TODO: Import firestore reducer to sync firestore data with the state in background
-import {firestoreReducer} from 'redux-firestore';
+import authReducer from './authReducer'
+import projectReducer from './projectReducer'
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    project : projectReducer,
-    firestore: firestoreReducer
+    project: projectReducer,
+    firestore: firestoreReducer,
+    firebase: firebaseReducer
 });
 
-export default rootReducer;
+export default rootReducer
 
+// the key name will be the data property on the state object

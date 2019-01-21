@@ -46,6 +46,7 @@ class CreateProject extends Component {
 
 // Call dispatch to reducer
 const mapDispatchToProps = (dispatch) => {
+
     return {
         createProject : (project) => dispatch(createProject(project))
     }

@@ -7,9 +7,11 @@
 // TODo: install redux-thunk or redux-saga and add it as a middleware
 
 
-import {applyMiddleware, createStore} from 'redux';
+import {applyMiddleware, createStore, compose} from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers/rootReducer'
+
+import firebase from '../config/firebase_config';
 
 // TODO: use applyMiddleWare function in createStore to pass list of middlewares to the app
 // TODO: use compose function to combine multiple store enhancers with the store
@@ -17,14 +19,21 @@ import rootReducer from './reducers/rootReducer'
 // TODO: To use firebase with your application along with firestore install react-redux-firebase and redux-firestore libs
 // TODO: use thunk with extra arguments to allow firebase to be used to fetch and store data
 
-import {getFirestore} from 'redux-firestore'
-import { getFirebase} from 'react-redux-firebase';
+import { getFirestore, reduxFirestore } from 'redux-firestore'
+import { getFirebase, reactReduxFirebase } from 'react-redux-firebase';
 
 // TODO: pass firebase configuration to reduxFireStore and reactReduxFirebase middlewares inside compose method
 
+
 export default  () => {
+
     return createStore(
+
         rootReducer,
-        applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore,})),
+        compose(
+        applyMiddleware(thunk.withExtraArgument({ getFirebase, getFirestore })),
+            reactReduxFirebase(firebase), // redux binding for firebase
+            reduxFirestore(firebase) // redux bindings for firestore
+        )
     );
 }
