@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
+import {Redirect, Route}  from 'react-router-dom';
 
 import {signInAction} from '../../store/actions/authAction';
 
 class SignIn extends Component {
     state = {
         email: '',
-        password: ''
+        password: '',
+        redirectToReferrer : false
     }
     handleChange = (e) => {
         this.setState({
@@ -19,6 +21,14 @@ class SignIn extends Component {
 
     }
     render() {
+        const {authError, auth} = this.props;
+        const {redirectToReferrer} = this.state;
+        const {from} = this.props.location.state || {from : {pathname : '/'}};
+
+        if(auth.uid) {
+           return <Redirect to='/' />
+        }
+        console.log(this.props);
         return (
             <div className="container">
                 <form className="white" onSubmit={this.handleSubmit}>
@@ -33,6 +43,9 @@ class SignIn extends Component {
                     </div>
                     <div className="input-field">
                         <button className="btn pink lighten-1 z-depth-0">Login</button>
+                        <div className="red-text center">
+                            {authError ? <p>{authError}</p> : null }
+                        </div>
                     </div>
                 </form>
             </div>
@@ -42,6 +55,7 @@ class SignIn extends Component {
 
 const mapStateToProps = (state) => {
     return{
+        auth : state.firebase.auth,
         authError: state.auth.authError
     }
 }

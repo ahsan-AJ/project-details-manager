@@ -11,6 +11,7 @@ import Notifications from './Notifications'
 // Import {connect} from react-redux to connect this component to the redux store
 import {connect} from 'react-redux';
 
+
 class Dashboard extends Component {
 
 
@@ -18,6 +19,10 @@ class Dashboard extends Component {
     render() {
 
         const {projects} = this.props;
+
+        // if(!auth.uid) {
+        //    return <Redirect to='/signin' />
+        // }
         // console.log(this.props);
         return (
             <div className="dashboard container">
@@ -38,6 +43,7 @@ class Dashboard extends Component {
 const mapStateToProps = (state) => {
     console.log(state);
     return {
+        // auth: state.firebase.auth,
         projects : state.firestore.ordered.projects
     }
 };
